@@ -2,10 +2,17 @@
 var alumno = require("../models/alumno");
 var profesor = require("../models/profesor")
 var Encuesta = require("../models/Encuesta");
+var asignatura = require("../models/asignatura");
+var unidad = require("../models/unidad");
+var subUnidad = require("../models/subUnidad");
+var feedback = require("../models/feedback");
+
 
 
 module.exports = function(app, passport) {
 
+    //RUTAS DE LA API
+    //RUTAS ALUMNO
 	app.get('/alumno/', function(req, res) {
 		alumno.get(res);
 	});
@@ -22,6 +29,7 @@ module.exports = function(app, passport) {
 		alumno.delete(req.params.id, res);
 	});
 
+    //RUTAS PROFESOR
 	app.get('/profesor/', function(req, res) {
 		profesor.get(res);
 	});
@@ -36,6 +44,77 @@ module.exports = function(app, passport) {
 		profesor.delete(req.params.id, res);
 	});
 
+    //RUTAS ASIGNATURA
+    app.get('/asignatura/', function(req, res) {
+        asignatura.get(res);
+    });
+
+    app.post('/asignatura/', function(req, res) {
+        asignatura.create(req.body, res);
+    });
+
+    app.put('/asignatura/', function(req, res) {
+        asignatura.update(req.body, res);
+    });
+
+    app.delete('/asignatura/:id/', function(req, res) {
+        asignatura.delete(req.params.id, res);
+    });
+
+    //RUTAS UNIDAD
+    app.get('/unidad/', function(req, res) {
+        unidad.get(res);
+    });
+
+    app.post('/unidad/', function(req, res) {
+        unidad.create(req.body, res);
+    });
+
+    app.put('/unidad/', function(req, res) {
+        unidad.update(req.body, res);
+    });
+
+    app.delete('/unidad/:id/', function(req, res) {
+        unidad.delete(req.params.id, res);
+    });
+
+    //RUTAS SUBUNIDAD
+    app.get('/subunidad/', function(req, res) {
+        subUnidad.get(res);
+    });
+
+    app.post('/subunidad/', function(req, res) {
+        subUnidad.create(req.body, res);
+    });
+
+    app.put('/subunidad/', function(req, res) {
+        subUnidad.update(req.body, res);
+    });
+
+    app.delete('/subunidad/:id/', function(req, res) {
+        subUnidad.delete(req.params.id, res);
+    });
+
+    //RUTAS FEEDBACK
+    app.get('/subunidad/', function(req, res) {
+        subUnidad.get(res);
+    });
+
+    app.post('/subunidad/', function(req, res) {
+        feedback.create(req.body, res);
+    });
+
+    app.put('/subunidad/', function(req, res) {
+        feedback.update(req.body, res);
+    });
+
+    app.delete('/subunidad/:id/', function(req, res) {
+        feedback.delete(req.params.id, res);
+    });
+
+
+
+    //RUTAS DE LA PAGINA
 	app.get('/', function(req, res) {
 		res.render('login.ejs',{ message: req.flash('loginMessage') });
 	});
@@ -78,13 +157,13 @@ module.exports = function(app, passport) {
 		req.logout();
 		res.redirect('/');
 	});
-};
 
+};
 
 function isLoggedIn(req, res, next) {
 
-	if (req.isAuthenticated())
-		return next();
+    if (req.isAuthenticated())
+        return next();
 
-	res.redirect('/');
+    res.redirect('/');
 }

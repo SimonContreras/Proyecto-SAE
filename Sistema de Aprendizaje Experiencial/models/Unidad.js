@@ -1,14 +1,13 @@
 /**
- * Created by SimonCM on 09-09-2016.
+ * Created by IngramCL on 20-10-2016.
  */
-
 var connection = require("../connection");
 
-function Alumno(){
+function Unidad(){
 
     this.get= function (res) {
         connection.acquire(function (err,con) {
-            con.query("SELECT * FROM alumno;", function (err,result) {
+            con.query("SELECT * FROM unidad;", function (err,result) {
                 con.release();
                 res.send(result);
             });
@@ -17,13 +16,13 @@ function Alumno(){
 
     this.create = function (req,res) {
         connection.acquire(function (err,con) {
-            con.query("CALL registrar_alumno(?, ?, ?, ?, ?);",
-                [req.rol, req.nombre, req.apellido, req.correo, req.contraseña], function (err,result) {
+            con.query("CALL crear_unidad(?, ?, ?, ?, ?);",
+                [req.rol, req.nombre, req.descripcion, req.id_profesor, req.id_asignatura], function (err) {
                     con.release();
                     if (err){
-                        res.send({status: 1, mensaje: "No se pudo registrar al Profesor"});
+                        res.send({status: 1, mensaje: "No se pudo crear la Unidad"});
                     } else{
-                        res.send({status: 0, mensaje:"Profesor Registrado exitosamente"});
+                        res.send({status: 0, mensaje:"Unidad creada exitosamente"});
                     }
                 });
         });
@@ -31,8 +30,8 @@ function Alumno(){
 
     this.update = function (req,res) {
         connection.acquire(function (err, con) {
-            con.query("CALL actualizar_info_alumno(?, ?, ?)",
-                [req.cod, req.rol, req.nuevo], function (err,result) {
+            con.query("CALL actualizar_info_unidad(?, ?, ?)",
+                [req.atributo, req.unidad_id, req.nuevo_valor], function (err,result) {
                     con.release();
                     if(err){
                         res.send({status: 1, mensaje: "No se pudo actualizar información"})
@@ -45,12 +44,12 @@ function Alumno(){
 
     this.delete = function (req,res) {
         connection.acquire(function (err,con) {
-            con.query("CALL eliminar_alumno(?);",[req], function (err,result) {
+            con.query("CALL eliminar_unidad(?);",[req], function (err,result) {
                 con.release();
                 if(err){
-                    res.send({status: 1, mensaje: "No se pudo eliminar Alumno"});
+                    res.send({status: 1, mensaje: "No se pudo eliminar la unidad"});
                 } else{
-                    res.send({status: 0, mensaje: "Alumno eliminado exitosamente"});
+                    res.send({status: 0, mensaje: "Unidad eliminada exitosamente"});
                 }
             });
         });
@@ -58,4 +57,4 @@ function Alumno(){
     };
 }
 
-module.exports = new Alumno();
+module.exports = new Unidad();

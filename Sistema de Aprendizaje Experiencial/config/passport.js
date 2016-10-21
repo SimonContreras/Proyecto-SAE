@@ -12,7 +12,6 @@ module.exports = function(passport) {
         done(null, user.id_rol);
     });
 
-
     passport.deserializeUser(function(id_rol, done) {
         connection.query("SELECT * FROM alumno WHERE id_rol = ? ",[id_rol], function(err, rows){
             done(err, rows[0]);
