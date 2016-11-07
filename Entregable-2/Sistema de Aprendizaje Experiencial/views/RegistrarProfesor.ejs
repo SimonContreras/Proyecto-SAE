@@ -1,0 +1,78 @@
+<!-- views/Principal.ejs -->
+<!doctype html>
+<html ng-app="app">
+<head>
+    <script src="jquery-2.0.3.min.js"></script>
+    <script src="angular.js"></script>
+    <script src="angular-animate.js"></script>
+    <script src="angular-sanitize.js"></script>
+    <script src="ui-bootstrap-tpls-2.1.3.js"></script>
+    <script src="angular-messages.js"></script>
+    <script src="Controlador.js"></script>
+    <link href="bootstrap.css" rel="stylesheet">
+    <link href="app.css" rel="stylesheet" />
+</head>
+<body>
+    <%if(user.tipo==2){%>
+    <div id = "bloque_blanco_up">
+        <h1 id = "titulo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAE</h1>
+        <img src="UTFSM.gif" id = "usm-home" alt="usm-home">
+    </div>
+    <br/>
+    <nav class="navbar navbar-default">
+        <div id = "logout">
+            <a  href="/Perfil"><span class="glyphicon glyphicon-user"></span><%=user.nombre%></a>
+            <a href="/login"><span class="glyphicon glyphicon-log-out"></span> Salir</a>
+        </div>
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li class="dropdown" ng-controller="DropdownCtrl" uib-dropdown keyboard-nav>
+                    <a class="dropdown-toggle" data-toggle="dropdown" uib-dropdown-toggle href="#"><span uib-dropdown-toggle class="glyphicon glyphicon-menu-hamburger"></span></a>
+                    <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                        <li><a href="/Principal">Inicio</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Registros</li>
+                        <li><a href="/RegistrarAlumno">Alumno</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/Perfil">Perfil</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/Ramos">Ramos</a></li>
+                    </ul>
+                </li>
+                <li class="active"><a href="#">Registrar Profesor</a></li>
+            </ul>
+        </div>
+    </nav>
+    <br/>
+    <%if(message!=""){%>
+    <div id = "mensajes_registro" style="background-color: white" class="alert"><%=message%></div>
+    <%}%>
+    <div ng-controller="Required" class="container" id = "container_Registro" >
+        <form name = "form" method="post" action="/RegistrarProfesor">
+            <br>
+            <br>
+            <div style= "margin-left: 240px"  class="form-group">
+                <label >Nombre:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input name="Profesor[nombre]">
+            </div>
+            <div style= "margin-left: 240px"  class="form-group">
+                <label >Apellido:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input name="Profesor[apellido]">
+            </div>
+            <div style= "margin-left: 240px"  class="form-group">
+                <label >Rut:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input name="Profesor[rut]">
+            </div>
+            <div  style= "margin-left: 240px" class="form-group">
+                <label >Correo:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                <input name="Profesor[correo]">
+            </div>
+            <button id="btn"  ng-if = "form.$valid"  style= "margin-left: 340px"  class="btn btn-default">Registrar</button>
+            <button  id="btn"  ng-if = "form.$invalid"  style= "margin-left: 340px" type="submit" class="btn btn-default">Registrar</button>
+        </form>
+    </div>
+    <%}else{%>
+    <h3 style="color:white;"> Page Not Found</h3>
+    <%}%>
+</body>
+</html>
