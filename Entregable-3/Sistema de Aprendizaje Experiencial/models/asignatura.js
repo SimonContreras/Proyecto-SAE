@@ -1,0 +1,180 @@
+/**
+ * Created by SimonCM on 09-09-2016.
+ */
+
+var connection = require("../connection");
+
+function Asignatura(){
+
+    this.get = function (done) {
+        connection.acquire(function (err,con) {
+            con.query("SELECT * FROM asignatura",function (err,rows) {
+                con.release();
+                return done(null,rows);
+            });
+        });
+    };
+
+    this.delete = function (req,res) {
+        connection.acquire(function (err,con) {
+            con.query("CALL eliminar_asignatura(?);",[req], function (err) {
+                con.release();
+                if(err){
+                    res.send({status: 1, mensaje: "No se pudo eliminar Profesor"});
+                } else{
+                    res.send({status: 0, mensaje: "Profesor eliminado exitosamente"});
+                }
+            });
+        });
+
+    };
+
+    this.create =  function (sigla,nombre,descripcion) {
+        var post = {id_sigla: sigla, nombre: nombre, descripcion:descripcion};
+        connection.acquire(function (err,con) {
+            con.query("INSERT INTO  asignatura SET ?;",post,function (err,rows) {
+                con.release();
+            });
+        });
+    };
+
+
+    this.update = function (req,res) {
+        connection.acquire(function (err, con) {
+            con.query("CALL actualizar_info_asignatura(?, ?, ?)",
+                [req.atributo, req.sigla_id, req.nuevo_valor], function (err) {
+                    con.release();
+                    if(err){
+                        res.send({status: 1, mensaje: "No se pudo actualizar información"})
+                    } else{
+                        res.send({status: 0, mensaje: "Información actualizada correctamente"})
+                    }
+                });
+        });
+    };
+
+    this.delete = function (req,res) {
+        connection.acquire(function (err,con) {
+            con.query("CALL eliminar_asignatura(?);",[req], function (err) {
+                con.release();
+                if(err){
+                    res.send({status: 1, mensaje: "No se pudo eliminar Profesor"});
+                } else{
+                    res.send({status: 0, mensaje: "Profesor eliminado exitosamente"});
+                }
+            });
+        });
+
+    };
+
+
+
+    this.InscribirAsignaturaAlumno = function (sigla,correo,id,done) {
+        var post = {alumno_id_alumno: id, alumno_correo: correo, asignatura_id_sigla: sigla}
+        connection.acquire(function (err,con) {
+            con.query("INSERT INTO  alumno_has_asignatura  SET ?",post,function (err,rows) {
+                return done(null,true);
+                con.release();
+            });
+        });
+    };
+
+    this.createFeedback = function (req,done) {
+        var post = {valor:req.body.valor,comentario:req.body.comentario,alumno_id_alumno:req.body.alumno_id_alumno,alumno_correo:req.body.alumno_correo,asignatura_id_asignatura:req.body.asignatura_id_asignatura};
+        connection.acquire(function (err,con) {
+            con.query("INSERT INTO  feedback SET ?;",
+                post, function (err) {
+                    con.release();
+                    if(err){   return done(null,false);}
+                    else{ return done(null,true);}
+                });
+        });
+    };
+
+    this.getNoticias = function (done) {
+        connection.acquire(function (err,con) {
+            con.query("SELECT * FROM noticia;",function (err,rows) {
+                con.release();
+                return done(null,rows);
+            })
+        });
+    };
+
+
+
+    this.InscribirAsignaturaProfesor = function (sigla,correo,id,done) {
+        var post = {profesor_id_profesor: id, profesor_correo: correo, asignatura_id_sigla: sigla}
+        connection.acquire(function (err,con) {
+            con.query("INSERT INTO  asignatura_has_profesor  SET ?",post,function (err,rows) {
+                return done(null,true);
+                con.release();
+            });
+        });
+    };
+    this.profesorAsignaturas= function (id,done) {
+            connection.acquire(function (err, con) {
+                con.query("SELECT * FROM asignatura_has_profesor where profesor_id_rut = ?", [id], function (err, rows) {
+                    con.release();
+                    var Misasignaturas = [];
+                    for (var i = 0; i < rows.length; i++) {
+                        Misasignaturas.unshift(rows[i].asignatura_id_sigla);
+                    }
+                    return done(null, Misasignaturas);
+                });
+            });
+    };
+
+    this.asignaturasInscritasAlumno= function (id,done) {
+            connection.acquire(function (err, con) {
+                con.query("SELECT * FROM alumno_has_asignatura where alumno_id_alumno = ?", [id], function (err, rows) {
+                    con.release();
+                    var Misasignaturas = [];
+                    for (var i = 0; i < rows.length; i++) {
+                        Misasignaturas.unshift(rows[i].asignatura_id_sigla);
+                    }
+                    return done(null, Misasignaturas);
+                });
+            });
+    };
+    this.CargarDatosAsignatura = function (id,done) {
+        connection.acquire(function (err,con) {
+            con.query("SELECT * FROM asignatura where id_sigla = ?",[id], function (err,rows) {
+                con.release();
+                var row = rows[0];
+                return done(null, row);
+            });
+        });
+    }
+    this.inscribirAsignaturaProfesor = function(req,res) {
+        connection.acquire(function (err, con) {
+            conn.query("CALL inscribir_asignatura_profesor(?,?);", [req.rut, req.sigla], function (err, result) {
+                con.release();
+                if (err) {
+                    res.send({status: 1, mensaje: "Asignatura no pudo ser inscrita"});
+                } else {
+                    res.send({status: 0, mensaje: "Asignatura inscrita"});
+                }
+            });
+        });
+    };
+    this.desinscribirAsignaturaAlumno = function(id,sigla,done) {
+        connection.acquire(function (err, con) {
+            con.query("CALL desinscribir_asignatura(?,?);", [id, sigla], function (err) {
+                con.release();
+               return done(null,true);
+            });
+        });
+    };
+
+    this.CargarUnidadesAsignatura = function (id,done) {
+        connection.acquire(function (err,con) {
+            con.query("SELECT * FROM unidad where asignatura_id_sigla = ? ORDER BY numero_unidad ASC",[id], function (err,rows) {
+                con.release();
+                return done(null, rows);
+            });
+        });
+    }
+}
+
+
+module.exports = new Asignatura();

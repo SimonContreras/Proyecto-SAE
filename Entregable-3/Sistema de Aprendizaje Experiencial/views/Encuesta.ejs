@@ -1,0 +1,704 @@
+<!doctype html>
+<html ng-app="app">
+<head>
+    <script src="jquery-2.0.3.min.js"></script>
+    <script src="angular.js"></script>
+    <script src="angular-animate.js"></script>
+    <script src="angular-sanitize.js"></script>
+    <script src="ui-bootstrap-tpls-2.1.3.js"></script>
+    <script src="angular-messages.js"></script>
+    <script src="Controlador.js"></script>
+    <link href="bootstrap.css" rel="stylesheet">
+    <link href="app.css" rel="stylesheet" />
+</head>
+<body>
+    <%if(user.tipo==0 && user.clasificacion == 0){%>
+    <div id = "bloque_blanco_up">
+        <h1 id = "titulo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SAE</h1>
+        <img src="UTFSM.gif" id = "usm-home" alt="usm-home">
+        <div id = "logout">
+            <a href="#"><span class="glyphicon glyphicon-user"></span><%=user.nombre%></a>
+            <a href="/login"><span class="glyphicon glyphicon-log-out"></span> Salir</a>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+                    <div id = "letra" ng-controller="CollapseDemoCtrl">
+                        <div uib-collapse="!isCollapsed">
+                            <div class="form-inline">
+                                <div class = "container encuesta"  >
+                                    <h3><strong>Bienvenido <%=user.nombre%>! debes llenar una encuesta antes de continuar.</strong></h3>
+                                    <h3>Instrucciones:</h3>
+                                    <h4>Ordena la frase dando valores del 4 al 1 segun la caracterisitica que mas te representa a la que menos te representa</h4>
+                                    <br>
+                                    <h4>Ejemplo:</h4>
+                                    <h4>Aprendo Mejor</h4>
+                                    <select  class="form-control" ng-model = "ej_1" style = "width:55px" >
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option ng-selected="true">4</option>
+                                    </select>
+                                    <label>Oyendo</label>
+                                    <br>
+                                    <select class="form-control"   ng-model = "ej_2" style = "width:55px"  >
+                                        <option >1</option>
+                                        <option>2</option>
+                                        <option ng-selected="true">3</option>
+                                        <option>4</option>
+                                    </select>
+                                    <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                    <br>
+                                    <select class="form-control" style = "width:55px"   ng-model = "ej_3">
+                                        <option ng-selected="true">1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select>
+                                    <label>Me siento personalmente involucrado con las cosas</label>
+                                    <br>
+                                    <select  class="form-control" style = "width:55px"    ng-model = "ej_4">
+                                        <option>1</option>
+                                        <option ng-selected="true">2</option>
+                                        <option>3</option>
+                                        <option >4</option>
+                                    </select>
+                                    <label>Escuchando</label>
+                                    <br>
+                                    <br>
+                                    <button type="button" class="btn btn-primary"  ng-click="isCollapsed = !isCollapsed" ng-hide="!isCollapsed">Responder encuesta</button>
+                                </div>
+                        </div>
+                        </div>
+                        <div uib-collapse="isCollapsed">
+                            <div class= "container" ng-controller="Clasificar">
+                                <form name = "form" class="form-inline"   role = "form"  method="post" action="/Encuesta" >
+                                    <div ng-if="(EC_1 == OR_1 || EC_1 == CA_1 || EC_1 == EA_1 || OR_1 == CA_1 || OR_1 == EA_1 || CA_1 == EA_1) && (EC_1 != null) && (EA_1 != null) && (CA_1 != null) && (OR_1 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 1! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_1.$error.required||form.OR_1.$error.required||form.CA_1.$error.required || form.EA_1.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 1! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 1</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control"    name ="EC_1" style = "width:55px" ng-model = "EC_1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control"  name ="OR_1" style = "width:55px"  ng-model = "OR_1" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control"  name = "CA_1" style = "width:55px"   ng-model = "CA_1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_1" style = "width:55px"  ng-model = "EA_1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_2 == OR_2 || EC_2 == CA_2 || EC_2 == EA_2 || OR_2 == CA_2 || OR_2 == EA_2 || CA_2 == EA_2) && (EC_2 != null) && (EA_2 != null) && (CA_2 != null) && (OR_2 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 2! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_2.$error.required||form.OR_2.$error.required||form.CA_2.$error.required || form.EA_2.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 2! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 2</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name ="EC_2" style = "width:55px" ng-model = "EC_2">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control"   name= "OR_2" style = "width:55px"  ng-model = "OR_2" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_2" style = "width:55px"   ng-model = "CA_2">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_2" style = "width:55px"  ng-model = "EA_2">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_3 == OR_3 || EC_3 == CA_3 || EC_3 == EA_3 || OR_3 == CA_3 || OR_3 == EA_3 || CA_3 == EA_3) && (EC_3 != null) && (EA_3 != null) && (CA_3 != null) && (OR_3 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 3! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_3.$error.required||form.OR_3.$error.required||form.CA_3.$error.required || form.EA_3.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 3! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 3</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_3" style = "width:55px" ng-model = "EC_3">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true"  class="form-control" name = "OR_3" style = "width:55px"  ng-model = "OR_3" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_3" style = "width:55px"   ng-model = "CA_3">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_3" style = "width:55px"  ng-model = "EA_3">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+
+                                    <div ng-if="(EC_4 == OR_4 || EC_4 == CA_4 || EC_4 == EA_4 || OR_4 == CA_4 || OR_4 == EA_4 || CA_4 == EA_4) && (EC_4 != null) && (EA_4 != null) && (CA_4 != null) && (OR_4 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 4! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_4.$error.required||form.OR_4.$error.required||form.CA_4.$error.required || form.EA_4.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 4! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 4</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_4" style = "width:55px" ng-model = "EC_4">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "OR_4" style = "width:55px"  ng-model = "OR_4" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_4" style = "width:55px"   ng-model = "CA_4">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_4" style = "width:55px"  ng-model = "EA_4">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_5 == OR_5 || EC_5 == CA_5|| EC_5 == EA_5 || OR_5 == CA_5 || OR_5 == EA_5 || CA_5 == EA_5) && (EC_5 != null) && (EA_5 != null) && (CA_5 != null) && (OR_5 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 5! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_5.$error.required||form.OR_5.$error.required||form.CA_5.$error.required || form.EA_5.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 5! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 5</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control"  name = "EC_5" style = "width:55px" ng-model = "EC_5">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control"  name = "OR_5" style = "width:55px"  ng-model = "OR_5" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control"  name = "CA_5" style = "width:55px"   ng-model = "CA_5">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control"  name = "EA_5" style = "width:55px"  ng-model = "EA_5">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_6 == OR_6 || EC_6 == CA_6 || EC_6 == EA_6 || OR_6 == CA_6 || OR_6 == EA_6 || CA_6 == EA_6) && (EC_6 != null) && (EA_6 != null) && (CA_6 != null) && (OR_6 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 6! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_6.$error.required||form.OR_6.$error.required||form.CA_6.$error.required || form.EA_6.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 6! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+
+
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 6</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_6" style = "width:55px" ng-model = "EC_6">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "OR_6"   style = "width:55px"  ng-model = "OR_6" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_6" style = "width:55px"   ng-model = "CA_6">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_6" style = "width:55px"  ng-model = "EA_6">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_7 == OR_7 || EC_7 == CA_7 || EC_7 == EA_7 || OR_7 == CA_7 || OR_7 == EA_7 || CA_7 == EA_7) && (EC_7 != null) && (EA_7 != null) && (CA_7 != null) && (OR_7 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 7! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_7.$error.required||form.OR_7.$error.required||form.CA_7.$error.required || form.EA_7.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 7! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+
+
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 7</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_7" style = "width:55px" ng-model = "EC_7">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "OR_7" style = "width:55px"  ng-model = "OR_7" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_7" style = "width:55px"   ng-model = "CA_7">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_7" style = "width:55px"  ng-model = "EA_7">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_8 == OR_8 || EC_8 == CA_8 || EC_8 == EA_8 || OR_8 == CA_8 || OR_8 == EA_8 || CA_8 == EA_8) && (EC_8 != null) && (EA_8 != null) && (CA_8 != null) && (OR_8 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 8! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_8.$error.required||form.OR_8.$error.required||form.CA_8.$error.required || form.EA_8.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 8! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+
+
+
+                                    <br>
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 8</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_8" style = "width:55px" ng-model = "EC_8">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "OR_8" style = "width:55px"  ng-model = "OR_8" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true"class="form-control" name = "CA_8" style = "width:55px"   ng-model = "CA_8">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true"  class="form-control" name = "EA_8" style = "width:55px"  ng-model = "EA_8">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_9 == OR_9 || EC_9 == CA_9 || EC_9 == EA_9 || OR_9 == CA_9 || OR_9 == EA_9 || CA_9 == EA_9) && (EC_9 != null) && (EA_9 != null) && (CA_9 != null) && (OR_9 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 9! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_9.$error.required||form.OR_9.$error.required||form.CA_9.$error.required || form.EA_9.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 9! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+
+
+                                    <br>
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 9</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_9" style = "width:55px" ng-model = "EC_9">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "OR_9" style = "width:55px"  ng-model = "OR_9" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_9" style = "width:55px"   ng-model = "CA_9">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_9" style = "width:55px"  ng-model = "EA_9">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_10 == OR_10 || EC_10 == CA_10 || EC_10 == EA_10 || OR_10 == CA_10 || OR_10 == EA_10 || CA_10 == EA_10) && (EC_10 != null) && (EA_10 != null) && (CA_10 != null) && (OR_10 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 10! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_10.$error.required||form.OR_10.$error.required||form.CA_10.$error.required || form.EA_10.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 10! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <br>
+
+
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 10</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_10" style = "width:55px" ng-model = "EC_10">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "OR_10" style = "width:55px"  ng-model = "OR_10" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_10" style = "width:55px"   ng-model = "CA_10">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_10" style = "width:55px"  ng-model = "EA_10">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_11 == OR_11 || EC_11 == CA_11 || EC_11 == EA_11 || OR_11 == CA_11 || OR_11 == EA_11 || CA_11 == EA_11) && (EC_11 != null) && (EA_11 != null) && (CA_11 != null) && (OR_11 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 11! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_11.$error.required||form.OR_11.$error.required||form.CA_11.$error.required || form.EA_11.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 11! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 11</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_11" style = "width:55px" ng-model = "EC_11">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "OR_11" style = "width:55px"  ng-model = "OR_11" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_11" style = "width:55px"   ng-model = "CA_11">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_11" style = "width:55px"  ng-model = "EA_11">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div ng-if="(EC_12 == OR_12 || EC_12== CA_12 || EC_12 == EA_12|| OR_12 == CA_12|| OR_12 == EA_12 || CA_12 == EA_12) && (EC_12 != null) && (EA_12 != null) && (CA_12 != null) && (OR_12 != null)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 12! Todos los valores deben ser distintos.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <div ng-if="rellenar && (form.EC_12.$error.required||form.OR_12.$error.required||form.CA_12.$error.required || form.EA_12.$error.required)">
+                                        <div class="alert alert-danger" style ="text-align: center;">
+                                            <h4><strong>Error en Pregunta 12! Debes seleccionar algun valor en todas las oraciones.</strong></h4>
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                    <div class = "container encuesta" >
+                                        <h3 style="text-align: center">Pregunta 12</h3>
+                                        <h4>Aprendo Mejor</h4>
+                                        <select ng-required="true" class="form-control" name = "EC_12" style = "width:55px" ng-model = "EC_12">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Oyendo</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "OR_12" style = "width:55px"  ng-model = "OR_12" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me gusta analizar las cosas, descomponerlas en sus partes</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "CA_12" style = "width:55px"   ng-model = "CA_12">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Me siento personalmente involucrado con las cosas</label>
+                                        <br>
+                                        <select ng-required="true" class="form-control" name = "EA_12" style = "width:55px"  ng-model = "EA_12">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                        </select>
+                                        <label>Escuchando</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div class="form-group">
+                                            <button   ng-if="form.$valid" id = "boton_encuesta" type="submit" class="btn btn-default  btn-block">Finalizar</button>
+                                    </div>
+                                </form>
+                                <button  ng-if="!form.$valid" id = "boton_encuesta" ng-click="relleno()" class="btn btn-default  btn-block">Finalizar</button>
+                            </div>
+                        </div>
+         </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <%}else{%>
+    <h3 style="color:white;"> Page Not Found</h3>
+    <%}%>
+</body>
+</html>
